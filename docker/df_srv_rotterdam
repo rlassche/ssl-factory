@@ -1,0 +1,27 @@
+# Details:
+#
+
+# Pull base image.
+FROM ubuntu:18.04
+# Maintainer
+MAINTAINER Rob Lassche <roblassche@yahoo.com>
+
+RUN apt-get update \
+	&& apt-get -y dist-upgrade -u \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		vim \
+		apache2 apache2-dev \
+		apt-transport-https \
+		net-tools inetutils-ping \
+		curl
+
+# Copy the certificate files to the image
+#COPY certs/ /tmp
+
+EXPOSE 80 443
+# WORKS
+CMD ["-D", "FOREGROUND"]
+ENTRYPOINT ["apachectl"]

@@ -1,2 +1,1 @@
-
-docker build --tag ssl-factory:v1 -f df_srv_rotterdam .
+docker build --tag srv_rotterdam:v1 -f df_srv_rotterdam .
