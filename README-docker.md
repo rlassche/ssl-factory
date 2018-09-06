@@ -253,3 +253,9 @@ a2enmod ssl
 a2ensite default-ssl.conf
 apachectl restart
 ```
+
+# ISSUES
+
+## Docker with ubuntu 18.04
+
+Apache2 start, but cannot connect to it. Network is different. So, I stay with ubuntu 16.04!
