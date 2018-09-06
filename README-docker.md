@@ -220,13 +220,13 @@ The md5 values are the same, so the key and certificate match!
 * Run the docker image and start a bash shell
 
 ```
-    docker run -d --name srv_rotterdam_01 srv_rotterdam:v1
+    docker run -d -p 9443:443 -p 9080:80 -v /tmp/share:/mnt --name srv_rotterdam_01 srv_rotterdam:v1
 ```
 
 * Connect to the running image
 
 ```
-    docker exec -it example /bin/bash
+    docker exec -it srv_rotterdam_01 /bin/bash
 ```
 
 * Check that web server is started and the hostname of the image

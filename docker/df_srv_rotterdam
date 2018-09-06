@@ -2,7 +2,7 @@
 #
 
 # Pull base image.
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 # Maintainer
 MAINTAINER Rob Lassche <roblassche@yahoo.com>
 
@@ -16,10 +16,32 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		apache2 apache2-dev \
 		apt-transport-https \
 		net-tools inetutils-ping \
+		ca-certificates \
 		curl
 
 # Copy the certificate files to the image
-#COPY certs/ /tmp
+COPY certs/ /tmp
+
+# Update server certificate and key file in the config file 
+# and copy the cert files to the apache directory
+RUN sed 's/ssl-cert-snakeoil.pem/srv_rotterdam01.local.cert.pem/' /etc/apache2/sites-available/default-ssl.conf > /tmp/1 \
+    && sed 's/ssl-cert-snakeoil.key/srv_rotterdam01.local.key.pem/' /tmp/1  > /etc/apache2/sites-available/default-ssl.conf \
+	&& cp /tmp/srv_rotterdam01.local.cert.pem /etc/ssl/certs/srv_rotterdam01.local.cert.pem \
+	&& cp /tmp/srv_rotterdam01.local.key.pem /etc/ssl/private/srv_rotterdam01.local.key.pem \
+	&& openssl x509 -in /tmp/ca.cert.pem -inform PEM -out /usr/local/share/ca-certificates/ca_the_company.cert.crt \
+	&& update-ca-certificates
+
+RUN a2enmod ssl \
+	&& a2ensite default-ssl.conf \
+	&& apachectl restart
+
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+ENV APACHE_PID_FILE /var/run/apache2.pid
+ENV APACHE_RUN_DIR /var/run/apache2
+ENV APACHE_LOCK_DIR /var/lock/apache2 env APACHE_LOG_DIR /var/log/apache2
+
 
 EXPOSE 80 443
 # WORKS
