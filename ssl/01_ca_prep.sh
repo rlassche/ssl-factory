@@ -6,12 +6,7 @@
 ####################################################################
 SCRIPTNAME=`basename $0`;
 ROOTCA_DIR=ca;
-#SCRIPTDIR=`dirname $0` ;
 HOME=`pwd`
-#echo "SCRIPTDIR=$SCRIPTDIR"
-#echo "HOME=$HOME"
-
-#https://jamielinux.com/docs/openssl-certificate-authority/create-the-root-pair.html
 
 echo "$HOME/ca.config";
 
@@ -36,25 +31,13 @@ else
 	mkdir -p $HOME/$ROOTCA_DIR/server_certs/certs
 fi
 
-#Prepare directory structure in $ROOTCA_DIR/ca
-#=============================================
-#
-#$ROOTCA_DIR/ca/openssl.cnf:
-#apply policy_strict for all root CA signatures, as the root CA is only being 
-#used to create intermediate CAs.
-#!
-
-
-#echo "Create NEW and EMPTY dir structure in $ROOTCA_DIR"
 mkdir -p $ROOTCA_DIR \
 	&& echo "Create NEW and EMPTY dir structure in $ROOTCA_DIR"
 
 cd $HOME/$ROOTCA_DIR
-pwd
-echo "Create dirs: ca_certs crl newcerts private"
+
 mkdir ca_certs crl newcerts private
 chmod 700 private
 touch index.txt
 echo 1000 > serial
 cp $HOME/openssl.cnf $HOME/$ROOTCA_DIR
-

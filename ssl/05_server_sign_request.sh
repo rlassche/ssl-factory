@@ -1,6 +1,6 @@
 #!/bin/bash
 ###################################################################
-# Last update: 21-OKT-2017
+# Last update: 06-SEP-2018
 # Description:
 #	Sign server and client certificates
 ###################################################################
@@ -27,13 +27,12 @@ while getopts "c:" opt; do
 	esac
 done
 
-if [ ! -f ${SERVER_CONFIG} ]
+if [ ! -f "${SERVER_CONFIG}" ]
 then
 	echo "$SCRIPTNAME ERROR: Server config file $SERVER_CONFIG missing (-c option) $!";
 	exit 2
 fi
 . $HOME/${SERVER_CONFIG}
-echo "SS: $SERVER_COMMON_NAME"
 
 cd $ROOTCA_DIR
 
@@ -44,8 +43,6 @@ then
 	echo "$SCRIPTNAME WARNING: File server_certs/csr/${SERVER_COMMON_NAME}.csr.pem already exists"
 	exit 3;
 fi
-
-echo "SERVER_COMMON_NAME: $SERVER_COMMON_NAME\n";
 
 # add altnames 
 cp $HOME/openssl.cnf $HOME/opensslSRV.cnf

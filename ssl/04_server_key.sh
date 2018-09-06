@@ -20,9 +20,7 @@ while getopts "c:" opt; do
 	esac
 done
 
-ls -l $SERVER_CONFIG;
-
-if [ ! -f ${SERVER_CONFIG} ]
+if [ ! -f "${SERVER_CONFIG}" ]
 then
 	echo "$SCRIPTNAME ERROR: Server config file $SERVER_CONFIG missing (-c option) $!";
 	exit 1
