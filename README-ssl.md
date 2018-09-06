@@ -339,9 +339,10 @@ TODO.
 
 # <a name="tit_1_5"></a>CA administrator sends the certificates to the customer
 
-The customer in this case, is the devop in the Rotterdam office.
+The CA administrator will send the certicate files to the customer.
+In this case, the customer is the devop in the Rotterdam office.
 
-The customer will receive the following files:
+The following files will be shippend:
 
 1. Server key file  
    srv_rotterdam01.key.pem

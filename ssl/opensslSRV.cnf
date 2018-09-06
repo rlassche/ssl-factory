@@ -133,5 +133,5 @@ keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
 
 [alt_names]
-DNS.1=srv_rotteram01.local
-DNS.2=www.srv_rotteram01.local
+DNS.1=srv_rotterdam01.local
+DNS.2=www.srv_rotterdam01.local
