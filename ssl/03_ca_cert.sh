@@ -33,7 +33,7 @@ fi
 
 cd $ROOTCA_DIR
 
-if [ -f certs/ca.cert.pem ]
+if [ -f "ca_certs/ca.cert.pem" ]
 then
 	echo "$SCRIPTNAME WARNING: $ROOTCA_DIR/certs/ca.cert.pem already exists"
 	exit 0

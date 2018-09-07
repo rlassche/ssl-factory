@@ -35,7 +35,7 @@ fi
 if [ -d "$ROOTCA_DIR" ]
 then
 	echo "$SCRIPTNAME WARNING: ROOTCA_DIR $ROOTCA_DIR already exists. Preperation setup already done."
-	exit 0
+	exit 0;
 else
 	echo mkdir -p `dirname $HOME/$ROOTCA_DIR`
 	mkdir -p $HOME/$ROOTCA_DIR
