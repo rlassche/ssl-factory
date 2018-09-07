@@ -2,7 +2,23 @@
 ###################################################################
 # Last update: 21-OKT-2017
 # Description:
-# use root key (ca.key.pem) to create root cert. (ca.cert.pem)
+# use ca-root key (ca.key.pem) to create root cert. (ca.cert.pem)
+#
+#ca
+#├── ca_certs
+#│   ├── ca.cert.crt
+#│   └── ca.cert.pem
+#├── crl
+#├── index.txt
+#├── newcerts
+#├── openssl.cnf
+#├── private
+#│   └── ca.key.pem
+#├── serial
+#└── server_certs
+#    ├── certs
+#    ├── csr
+#    └── private
 ###################################################################
 SCRIPTNAME=`basename $0`;
 SCRIPTDIR=`dirname $0` ;
@@ -14,16 +30,6 @@ then
 	exit 1
 fi
 . $HOME/ca.config
-#while getopts ":h::s:" opt; do
-#	case $opt in
-#	s) 
-#		SUBJ=$OPTARG
-#		#echo "SUBJ $SUBJ" 
-#	;;
-#	\?) echo "$SCRIPTNAME: Invalid option: -$OPTARG"
-#	;;
-#	esac
-#done
 
 cd $ROOTCA_DIR
 
@@ -33,14 +39,7 @@ then
 	exit 0
 fi
 
-#subjROOTCA="/CN=Alice Ltd Root CA/C=GB/ST=England";
-#subjROOTCA+="/O=Alice Ltd/OU=Alice Ltd Certificate Authority"
 subjROOTCA="/CN=$CA_COMMON_NAME/O=$ORGANISATION/OU=$ORGANISATION_UNIT/C=$CA_COUNTRY_CODE/L=$ORGANISATION_CITY/ST=$ORGANISATION_STREET";
-
-echo "$subjROOTCA\n";
-
-echo "Generate ca_certs/ca.cert.pem"
-pwd
 
 openssl req -config $HOME/openssl.cnf \
       -key private/ca.key.pem \
@@ -51,6 +50,12 @@ if [ $? -ne 0 ]
 then
 	"$SCRIPTNAME: error openssl req"
 fi
-chmod 444 ca_certs/ca.cert.pem
 
+
+# Convert PEM to CRT format (required for ca-certificates update in Ubuntu)
+openssl x509 -in ca_certs/ca.cert.pem  -out ca_certs/ca.cert.crt
+
+chmod 444 ca_certs/ca.cert.pem ca_certs/ca.cert.crt
+
+# Print the certificate
 openssl x509 -noout -text -in ca_certs/ca.cert.pem

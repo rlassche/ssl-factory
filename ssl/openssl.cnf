@@ -119,6 +119,7 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer:always
 keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth
+subjectAltName=@alt_names
 
 [ crl_ext ]
 # Extension for CRLs (`man x509v3_config`).
@@ -131,3 +132,8 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
+
+
+[alt_names]
+DNS.1=example.com
+DNS.2=www.example.com

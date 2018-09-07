@@ -1,8 +1,23 @@
 #!/bin/bash
 ####################################################################
-# Last update: 21-OKT-2017
+# Last update: 07-SEP-2018
 # Description:
 # create PRIMARY root key ca.key.pem
+#
+# ca
+# ├── ca_certs
+# ├── crl
+# ├── index.txt
+# ├── newcerts
+# ├── openssl.cnf
+# ├── private
+# │   └── ca.key.pem
+# ├── serial
+# └── server_certs
+#     ├── certs
+#     ├── csr
+#     └── private
+# 
 ####################################################################
 SCRIPTNAME=`basename $0`;
 SCRIPTDIR=`dirname $0` ;
@@ -16,14 +31,12 @@ fi
 . $HOME/ca.config
 
 cd $ROOTCA_DIR
-pwd
 
 if [ -f private/ca.key.pem ]
 then
 	echo "$SCRIPTNAME WARNING: private/ca.key.pem for PRIMARY ROOT CA already exists"
 	exit 0
 fi
-echo "Create private/ca.key.pem"
 
 # Generate the key
 openssl genrsa -out private/ca.key.pem 4096

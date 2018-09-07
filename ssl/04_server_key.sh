@@ -1,8 +1,27 @@
 #!/bin/bash
 ###################################################################
-# Last update: 21-OKT-2017
+# Last update: 07-SEP-2018
 # Description:
 #	Sign server and client certificates
+#
+###################################################################
+# ca
+# ├── ca_certs
+# │   ├── ca.cert.crt
+# │   └── ca.cert.pem
+# ├── crl
+# ├── index.txt
+# ├── newcerts
+# ├── openssl.cnf
+# ├── private
+# │   └── ca.key.pem
+# ├── serial
+# └── server_certs
+#     ├── certs
+#     ├── csr
+#     └── private
+#         └── srv_rotterdam01.local.key.pem
+# 
 ###################################################################
 SCRIPTNAME=`basename $0`;
 SCRIPTDIR=`dirname $0` ;
@@ -46,13 +65,11 @@ cd $ROOTCA_DIR
 echo "$SCRIPTNAME: Generate file server_certs/private/${SERVER_COMMON_NAME}.key.pem "
 
 # NO PASSWORD: OMMIT -aes256
-pwd
 openssl genrsa  \
       -out server_certs/private/${SERVER_COMMON_NAME}.key.pem 2048
 if [ $? -ne 0 ]
 then
 		"error genrsa "
 fi
-pwd
 
 chmod 400 server_certs/private/${SERVER_COMMON_NAME}.key.pem

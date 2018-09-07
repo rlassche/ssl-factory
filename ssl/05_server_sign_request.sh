@@ -1,8 +1,27 @@
 #!/bin/bash
 ###################################################################
-# Last update: 06-SEP-2018
+# Last update: 07-SEP-2018
 # Description:
 #	Sign server and client certificates
+###################################################################
+# ca
+# ├── ca_certs
+# │   ├── ca.cert.crt
+# │   └── ca.cert.pem
+# ├── crl
+# ├── index.txt
+# ├── newcerts
+# ├── openssl.cnf
+# ├── private
+# │   └── ca.key.pem
+# ├── serial
+# └── server_certs
+#     ├── certs
+#     ├── csr
+#     │   └── srv_rotterdam01.local.csr.pem
+#     └── private
+#         └── srv_rotterdam01.local.key.pem
+# 
 ###################################################################
 SCRIPTNAME=`basename $0`;
 SCRIPTDIR=`dirname $0` ;
@@ -20,7 +39,6 @@ while getopts "c:" opt; do
 	case $opt in
 	c) 
 		SERVER_CONFIG=$OPTARG
-		echo "SERVER_CONFIG $SERVER_CONFIG" 
 		;;
 	\?) echo "$SCRIPTNAME ERROR: Invalid option: -$OPTARG"
 	;;
@@ -36,31 +54,20 @@ fi
 
 cd $ROOTCA_DIR
 
-
-
 if [ -f server_certs/csr/${SERVER_COMMON_NAME}.csr.pem ]
 then
 	echo "$SCRIPTNAME WARNING: File server_certs/csr/${SERVER_COMMON_NAME}.csr.pem already exists"
 	exit 3;
 fi
 
-# add altnames 
-cp $HOME/openssl.cnf $HOME/opensslSRV.cnf
-cat <<! >> $HOME/opensslSRV.cnf
+cat openssl.cnf | sed -e '/^DNS.1=/ s/=\(.*\)/=srv_rotterdam01.local/' \
+					  -e '/^DNS.2=/ s/=\(.*\)/=www.srv_rotterdam01.local/' \
+			> /tmp/opensslSRV.cnf
 
-[alt_names]
-DNS.1=$SERVER_COMMON_NAME
-DNS.2=www.$SERVER_COMMON_NAME
-!
-
-#subjSERVER="/C=NL/ST=Haverstraat 2/L=Nieuw-Vennep/O=Snoeks/OU=IT Department/CN=linux.snoeksautomotive.com"
-
-#subjSERVER="/C=NL/ST=Haverstraat 2/L=Nieuw-Vennep/O=Snoeks/OU=IT Department/CN=linux.snoeksautomotive.com"
 subjSERVER="/C=$SERVER_COUNTRY_CODE/ST=$ORGANISATION_STREET/L=$ORGANISATION_CITY/O=$ORGANISATION/OU=$ORGANISATION_UNIT/CN=$SERVER_COMMON_NAME";
 echo "Subject: $subjSERVER";
 
-echo "Generate file server_certs/csr/${SERVER_COMMON_NAME}.csr.pem "
-openssl req -config "${HOME}/opensslSRV.cnf" \
+openssl req -config "/tmp/opensslSRV.cnf" \
       -key server_certs/private/${SERVER_COMMON_NAME}.key.pem \
 	  -subj "$subjSERVER" \
 	  -out server_certs/csr/${SERVER_COMMON_NAME}.csr.pem \

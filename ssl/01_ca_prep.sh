@@ -1,8 +1,22 @@
 #!/bin/bash
 ####################################################################
-# Last update: 06-SEP-2018
+# Last update: 07-SEP-2018
 # Description:
-#	Setup the CA directory structure
+#	Geneate the CA directory structure
+#
+# ca
+# ├── ca_certs
+# ├── crl
+# ├── index.txt
+# ├── newcerts
+# ├── openssl.cnf
+# ├── private
+# ├── serial
+# └── server_certs
+#     ├── certs
+#     ├── csr
+#     └── private
+# 
 ####################################################################
 SCRIPTNAME=`basename $0`;
 ROOTCA_DIR=ca;
@@ -18,7 +32,6 @@ fi
 
 . $HOME/ca.config
 
-echo "ROOTCA_DIR: $ROOTCA_DIR"
 if [ -d "$ROOTCA_DIR" ]
 then
 	echo "$SCRIPTNAME WARNING: ROOTCA_DIR $ROOTCA_DIR already exists. Preperation setup already done."

@@ -1,9 +1,35 @@
 #!/bin/bash
 ###################################################################
-# Last update: 21-OKT-2017
+# Last update: 07-SEP-2018
 # Description:
 #	Create a certificate with the intermediate CA
 ###################################################################
+#
+# ca
+# ├── ca_certs
+# │   ├── ca.cert.crt
+# │   └── ca.cert.pem
+# ├── crl
+# ├── index.txt
+# ├── index.txt.attr
+# ├── index.txt.old
+# ├── newcerts
+# │   └── 1000.pem
+# ├── openssl.cnf
+# ├── private
+# │   └── ca.key.pem
+# ├── serial
+# ├── serial.old
+# └── server_certs
+#     ├── certs
+#     │   ├── srv_rotterdam01.local.cert.crt
+#     │   └── srv_rotterdam01.local.cert.pem
+#     ├── csr
+#     │   └── srv_rotterdam01.local.csr.pem
+#     └── private
+#         └── srv_rotterdam01.local.key.pem
+# 
+####################################################################################
 SCRIPTNAME=`basename $0`;
 SCRIPTDIR=`dirname $0` ;
 HOME=`pwd`
@@ -13,7 +39,6 @@ while getopts "c:" opt; do
 	case $opt in
 	c) 
 		SERVER_CONFIG=$OPTARG
-		echo "SERVER_CONFIG $SERVER_CONFIG" 
 		;;
 	\?) echo "$SCRIPTNAME ERROR: Invalid option: -$OPTARG"
 		;;
@@ -26,10 +51,8 @@ then
 	echo "$SCRIPTNAME ERROR: Server config file $SERVER_CONFIG missing (-c option) $!";
 	exit 2
 fi
-echo "1. SERVER_CONFIG=$SERVER_CONFIG";
 
 . $HOME/${SERVER_CONFIG}
-echo "SERVER_COMMON_NAME: $SERVER_COMMON_NAME"
 
 if [ ! -f $HOME/ca.config ]
 then
@@ -38,17 +61,17 @@ then
 fi
 . $HOME/ca.config
 cd $ROOTCA_DIR
-pwd
+
 # add altnames 
-cp $HOME/openssl.cnf $HOME/opensslSRV.cnf
-cat <<! >> $HOME/opensslSRV.cnf
+#cp $HOME/openssl.cnf $HOME/opensslSRV.cnf
+#cat <<! >> $HOME/opensslSRV.cnf
+#
+#[alt_names]
+#DNS.1=$SERVER_COMMON_NAME
+#DNS.2=www.$SERVER_COMMON_NAME
+#!
 
-[alt_names]
-DNS.1=$SERVER_COMMON_NAME
-DNS.2=www.$SERVER_COMMON_NAME
-!
-
-openssl ca -config $HOME/opensslSRV.cnf \
+openssl ca -config $HOME/openssl.cnf \
       -extensions server_cert -days 375 -notext -md sha256 \
       -in server_certs/csr/${SERVER_COMMON_NAME}.csr.pem \
       -out server_certs/certs/${SERVER_COMMON_NAME}.cert.pem \
@@ -59,6 +82,7 @@ then
 	error "error: ca ... "
 fi
 
+# Convert PEM to CRT format
+openssl x509 -in server_certs/certs/${SERVER_COMMON_NAME}.cert.pem  -out server_certs/certs/${SERVER_COMMON_NAME}.cert.crt
+
 chmod 444 server_certs/certs/${SERVER_COMMON_NAME}.cert.pem
-
-
