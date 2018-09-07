@@ -62,15 +62,6 @@ fi
 . $HOME/ca.config
 cd $ROOTCA_DIR
 
-# add altnames 
-#cp $HOME/openssl.cnf $HOME/opensslSRV.cnf
-#cat <<! >> $HOME/opensslSRV.cnf
-#
-#[alt_names]
-#DNS.1=$SERVER_COMMON_NAME
-#DNS.2=www.$SERVER_COMMON_NAME
-#!
-
 openssl ca -config $HOME/openssl.cnf \
       -extensions server_cert -days 375 -notext -md sha256 \
       -in server_certs/csr/${SERVER_COMMON_NAME}.csr.pem \

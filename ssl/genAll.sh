@@ -10,3 +10,4 @@
 ./04_server_key.sh -c srv_rotterdam.config
 ./05_server_sign_request.sh -c srv_rotterdam.config
 ./06_ca_signs_server_sign_request.sh -c srv_rotterdam.config
+./07_ship_certificates.sh -c srv_rotterdam.config
