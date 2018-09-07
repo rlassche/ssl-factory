@@ -24,6 +24,7 @@ COPY certs/ /tmp
 
 # Update server certificate and key file in the config file 
 # and copy the cert files to the apache directory
+# sed /ServerAdmin/ APPEND does not work in the RUN cmd....???? Inside the running images it sed-command works..
 RUN sed 's/ssl-cert-snakeoil.pem/srv_rotterdam01.local.cert.pem/' /etc/apache2/sites-available/default-ssl.conf > /tmp/1 \
     && sed 's/ssl-cert-snakeoil.key/srv_rotterdam01.local.key.pem/' /tmp/1  > /etc/apache2/sites-available/default-ssl.conf \
 	&& cp /tmp/srv_rotterdam01.local.cert.pem /etc/ssl/certs/srv_rotterdam01.local.cert.pem \
@@ -31,9 +32,14 @@ RUN sed 's/ssl-cert-snakeoil.pem/srv_rotterdam01.local.cert.pem/' /etc/apache2/s
 	&& openssl x509 -in /tmp/ca.cert.pem -inform PEM -out /usr/local/share/ca-certificates/ca_the_company.cert.crt \
 	&& update-ca-certificates
 
+COPY fixInImage.sh /tmp
+
 RUN a2enmod ssl \
-	&& a2ensite default-ssl.conf \
-	&& apachectl restart
+	&& a2ensite default-ssl.conf
+
+
+RUN	sed -i '/ServerAdmin/a          ServerName srv_rotterdam01.local' /etc/apache2/sites-available/default-ssl.conf \
+	&& cat /etc/apache2/sites-available/default-ssl.conf
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
@@ -45,5 +51,5 @@ ENV APACHE_LOCK_DIR /var/lock/apache2 env APACHE_LOG_DIR /var/log/apache2
 
 EXPOSE 80 443
 # WORKS
-CMD ["-D", "FOREGROUND"]
-ENTRYPOINT ["apachectl"]
+
+ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

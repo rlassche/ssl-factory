@@ -62,7 +62,7 @@ fi
 . $HOME/ca.config
 cd $ROOTCA_DIR
 
-openssl ca -config $HOME/openssl.cnf \
+openssl ca -config server_certs/openssl.${SERVER_COMMON_NAME}.cnf \
       -extensions server_cert -days 375 -notext -md sha256 \
       -in server_certs/csr/${SERVER_COMMON_NAME}.csr.pem \
       -out server_certs/certs/${SERVER_COMMON_NAME}.cert.pem \
@@ -76,4 +76,4 @@ fi
 # Convert PEM to CRT format
 openssl x509 -in server_certs/certs/${SERVER_COMMON_NAME}.cert.pem  -out server_certs/certs/${SERVER_COMMON_NAME}.cert.crt
 
-chmod 444 server_certs/certs/${SERVER_COMMON_NAME}.cert.pem
+#chmod 444 server_certs/certs/${SERVER_COMMON_NAME}.cert.pem

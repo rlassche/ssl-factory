@@ -60,14 +60,14 @@ then
 	exit 3;
 fi
 
-cat openssl.cnf | sed -e '/^DNS.1=/ s/=\(.*\)/=srv_rotterdam01.local/' \
-					  -e '/^DNS.2=/ s/=\(.*\)/=www.srv_rotterdam01.local/' \
-			> /tmp/opensslSRV.cnf
-
+#cat openssl.cnf | sed -e '/^DNS.1=/ s/=\(.*\)/=srv_rotterdam01.local/' \
+#					  -e '/^DNS.2=/ s/=\(.*\)/=www.srv_rotterdam01.local/' \
+#			> server_certs/openssl.${SERVER_COMMON_NAME}.cnf
+#
 subjSERVER="/C=$SERVER_COUNTRY_CODE/ST=$ORGANISATION_STREET/L=$ORGANISATION_CITY/O=$ORGANISATION/OU=$ORGANISATION_UNIT/CN=$SERVER_COMMON_NAME";
 echo "Subject: $subjSERVER";
 
-openssl req -config "/tmp/opensslSRV.cnf" \
+openssl req -config "server_certs/openssl.${SERVER_COMMON_NAME}.cnf" \
       -key server_certs/private/${SERVER_COMMON_NAME}.key.pem \
 	  -subj "$subjSERVER" \
 	  -out server_certs/csr/${SERVER_COMMON_NAME}.csr.pem \

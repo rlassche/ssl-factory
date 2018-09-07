@@ -72,4 +72,5 @@ then
 		"error genrsa "
 fi
 
-chmod 400 server_certs/private/${SERVER_COMMON_NAME}.key.pem
+#chmod 400 server_certs/private/${SERVER_COMMON_NAME}.key.pem
+openssl rsa -in server_certs/private/${SERVER_COMMON_NAME}.key.pem
