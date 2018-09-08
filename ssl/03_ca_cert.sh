@@ -24,6 +24,9 @@ SCRIPTNAME=`basename $0`;
 SCRIPTDIR=`dirname $0` ;
 HOME=`pwd`
 ROOTCA_DIR=ca;
+
+echo -e "######## $SCRIPTNAME started...\n";
+
 if [ ! -f $HOME/ca.config ]
 then
 	echo "$SCRIPTNAME: Config file ca.config not found"

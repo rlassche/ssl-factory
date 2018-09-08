@@ -8,6 +8,9 @@ SCRIPTNAME=`basename $0`;
 SCRIPTDIR=`dirname $0` ;
 ROOTCA_DIR=ca;
 HOME=`pwd`
+
+echo -e "######## $SCRIPTNAME started...\n";
+
 # A certificate revocation list (CRL) provides a list of certificates that 
 # have been revoked. A client application, such as a web browser, can use 
 # a CRL to check a server’s authenticity. A server application, such as 
@@ -36,11 +39,11 @@ done
 if [ ! -f "${EMAIL_CONFIG}" ]
 then
 	echo "$SCRIPTNAME ERROR: Email config file $EMAIL_CONFIG missing (-e option) $!";
-	exit 2
+	
 fi
 
-. ${EMAIL_CONFIG}
-. ${SERVER_CONFIG}
+. $HOME/${EMAIL_CONFIG}
+. $HOME/${SERVER_CONFIG}
 
 if [ ! -f "ca/server_certs/openssl.${SERVER_COMMON_NAME}.cnf" ]
 then
@@ -49,22 +52,23 @@ fi
 echo "ROOTCA_DIR  : $ROOTCA_DIR"
 
 cd $ROOTCA_DIR
-pwd
+
 if [ -f server_certs/crl/${SERVER_COMMON_NAME}.crl.pem ]
 then
 	echo "Server revoke list already exist. (server_certs/crl/crl/${SERVER_COMMON_NAME}.crl.pem)"
 	exit 0;
 fi
 
-ls -l crlnumber
-cat crlnumber
-echo -e "************************\n"
-pwd
-echo -e "************************\n"
+echo -e "############################\n";
+ls -l server_certs/openssl.${SERVER_COMMON_NAME}.cnf;
+ls -l server_certs/crl
+
 openssl ca -config server_certs/openssl.${SERVER_COMMON_NAME}.cnf \
       -gencrl -out server_certs/crl/${SERVER_COMMON_NAME}.crl.pem
-
+#ls -l server_certs/crl.${SERVER_COMMON_NAME}.crl.pem;
+echo -e "############################\n";
 exit;
+
 # check the contents of the CRL with the crl tool.
 openssl crl -in server_certs/crl/${SERVER_COMMON_NAME}.crl.pem -noout -text
 

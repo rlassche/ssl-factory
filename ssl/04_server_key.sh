@@ -28,6 +28,8 @@ SCRIPTDIR=`dirname $0` ;
 HOME=`pwd`
 ROOTCA_DIR=ca;
 
+echo -e "######## $SCRIPTNAME started...\n";
+
 while getopts "c:" opt; do
 	case $opt in
 	c) 

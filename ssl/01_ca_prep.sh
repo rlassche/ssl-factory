@@ -22,6 +22,7 @@ SCRIPTNAME=`basename $0`;
 ROOTCA_DIR=ca;
 HOME=`pwd`
 
+echo -e "######## $SCRIPTNAME started...\n";
 echo "$HOME/ca.config";
 
 if [ ! -f $HOME/ca.config ]

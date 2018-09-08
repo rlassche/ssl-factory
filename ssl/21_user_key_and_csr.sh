@@ -8,6 +8,8 @@ SCRIPTDIR=`dirname $0` ;
 ROOTCA_DIR="ca"
 HOME=`pwd`
 
+echo -e "######## $SCRIPTNAME started...\n";
+
 if [ ! -f $HOME/ca.config ]
 then
 	echo "$SCRIPTNAME ERROR: Config file ca.config not found"
@@ -54,7 +56,7 @@ if [ ! -d email_certs/${SERVER_COMMON_NAME} ]
 then
 pwd
 	echo "Create email_certs/${SERVER_COMMON_NAME}"
-	mkdir "email_certs/${SERVER_COMMON_NAME}"
+	mkdir -p "email_certs/${SERVER_COMMON_NAME}"
 fi
 
 if [ -f email_certs/${SERVER_COMMON_NAME}/${EMAIL_USER_NAME}@${SERVER_COMMON_NAME}.key.pem ]

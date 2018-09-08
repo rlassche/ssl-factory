@@ -28,6 +28,8 @@ SCRIPTDIR=`dirname $0` ;
 HOME=`pwd`
 ROOTCA_DIR=ca;
 
+echo -e "######## $SCRIPTNAME started...\n";
+
 if [ ! -f $HOME/ca.config ]
 then
 	echo "$SCRIPTNAME ERROR: Config file ssl.config not found"
@@ -57,7 +59,7 @@ cd $ROOTCA_DIR
 if [ -f server_certs/csr/${SERVER_COMMON_NAME}.csr.pem ]
 then
 	echo "$SCRIPTNAME WARNING: File server_certs/csr/${SERVER_COMMON_NAME}.csr.pem already exists"
-	exit 3;
+	exit 0;
 fi
 
 cat openssl.cnf | sed -e "/^DNS.1=/ s/=\(.*\)/=${SERVER_COMMON_NAME}/" \
