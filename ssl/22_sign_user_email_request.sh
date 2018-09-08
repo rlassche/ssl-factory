@@ -28,7 +28,7 @@ openssl ca -config server_certs/openssl.${SERVER_COMMON_NAME}.cnf \
       -extensions usr_cert -notext -md sha256 \
       -in  "email_certs/${SERVER_COMMON_NAME}/${EMAIL_USER_NAME}@${SERVER_COMMON_NAME}.csr.pem" \
       -out "email_certs/${SERVER_COMMON_NAME}/${EMAIL_USER_NAME}@${SERVER_COMMON_NAME}.cert.pem" \
-	  -batch || echo -e "ERROR: openssl signing failed\n";
+	  -batch || ( echo -e "ERROR: openssl signing failed\n"; exit 2 );
 
 
 echo "$SCRIPTNAME: Convert pcs12"
@@ -38,7 +38,7 @@ openssl pkcs12 -export  \
 		-in    email_certs/${SERVER_COMMON_NAME}/${EMAIL_USER_NAME}@${SERVER_COMMON_NAME}.cert.pem \
 		-inkey email_certs/${SERVER_COMMON_NAME}/${EMAIL_USER_NAME}@${SERVER_COMMON_NAME}.key.pem \
 		-out   email_certs/${SERVER_COMMON_NAME}/${EMAIL_USER_NAME}@${SERVER_COMMON_NAME}.pfx \
-        -password pass:geheim || echo "ERROR: openssl pkcs12 failed\n";
+        -password pass:geheim || (echo "ERROR: openssl pkcs12 failed\n"; exit 3)
 if [ $? != 0 ]
 then
 	echo "#############################################################"

@@ -86,6 +86,8 @@ cp ca/ca_certs/* $TMP_DIR
 cp ca/server_certs/certs/${SERVER_COMMON_NAME}* $TMP_DIR
 cp ca/server_certs/private/${SERVER_COMMON_NAME}* $TMP_DIR
 cp ca/server_certs/crl/${SERVER_COMMON_NAME}* $TMP_DIR
+cp ca/email_certs/${SERVER_COMMON_NAME}/* $TMP_DIR
+rm $TMP_DIR/*csr*
 
 cd $TMP_DIR \
 	&& tar cvf /tmp/${SERVER_COMMON_NAME}.tar .

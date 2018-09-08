@@ -15,4 +15,6 @@
 						 -c srv_rotterdam.config \
 && ./21_user_key_and_csr.sh -e email_rob@srv_rotterdam01.local.config \
 						 -c srv_rotterdam.config \
+&& ./22_sign_user_email_request.sh -e email_rob@srv_rotterdam01.local.config \
+						 -c srv_rotterdam.config \
 && ./07_ship_certificates.sh -c srv_rotterdam.config

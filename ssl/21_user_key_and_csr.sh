@@ -54,7 +54,6 @@ cd $ROOTCA_DIR
 
 if [ ! -d email_certs/${SERVER_COMMON_NAME} ]
 then
-pwd
 	echo "Create email_certs/${SERVER_COMMON_NAME}"
 	mkdir -p "email_certs/${SERVER_COMMON_NAME}"
 fi
