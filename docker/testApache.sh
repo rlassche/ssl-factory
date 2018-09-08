@@ -15,7 +15,7 @@ then
 	echo "$SCRIPTNAME ERROR: Server config file $SERVER_CONFIG missing (-c option) $!";
 	exit 1
 fi
-. ../ssl/${SERVER_CONFIG}
+. $SERVER_CONFIG;
 
 ping -q -c 1 ${SERVER_COMMON_NAME} \
 	|| ( echo -e "Cannot ping to ${SERVER_COMMON_NAME}\n"; exit 1 ) \
@@ -48,8 +48,6 @@ else
   echo "Certificate has expired or will do so within 10 days!"
   echo "(or is invalid/not found)"
 fi
-echo "STOP";
-exit;
 
 echo -e "\nWho is the issuer of this certificate (CA):\n"
 echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
@@ -70,7 +68,13 @@ echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
 	openssl x509 -noout -issuer -subject -dates
 
 
-echo -e "\nFinger print\n";
+echo -e "\nFinger print ${SERVER_COMMON_NAME}\n";
 echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
 	-connect ${SERVER_COMMON_NAME}:9443 2>/dev/null | \
 	openssl x509 -noout -fingerprint
+
+
+echo -e "\nFinger print CA\n";
+openssl x509 -in certs/ca.cert.pem -noout -fingerprint
+
+echo "Now, you can install the client certificate and ca-root certificate in the browser(s)"

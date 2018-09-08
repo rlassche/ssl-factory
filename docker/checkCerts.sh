@@ -3,7 +3,7 @@
 while getopts "c:" opt; do
 	case $opt in
 	c) 
-		echo "SERVER_CONFIG $SERVER_CONFIG" 
+		SERVER_CONFIG=$OPTARG
 	;;
 	\?) echo "$SCRIPTNAME ERROR: Invalid option: -$OPTARG"
 	;;
@@ -15,7 +15,7 @@ then
 	echo "$SCRIPTNAME ERROR: Server config file $SERVER_CONFIG missing (-c option) $!";
 	exit 1
 fi
-. ../ssl/${SERVER_CONFIG}
+. $SERVER_CONFIG
 
 MD5_CERT=`openssl x509 -noout -modulus -in certs/srv_rotterdam01.local.cert.pem | openssl md5`
 
