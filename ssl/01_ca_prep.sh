@@ -42,6 +42,7 @@ else
 	mkdir -p $HOME/$ROOTCA_DIR/server_certs/private
 	mkdir -p $HOME/$ROOTCA_DIR/server_certs/csr
 	mkdir -p $HOME/$ROOTCA_DIR/server_certs/certs
+	mkdir -p $HOME/$ROOTCA_DIR/server_certs/crl
 fi
 
 mkdir -p $ROOTCA_DIR \
@@ -51,6 +52,12 @@ cd $HOME/$ROOTCA_DIR
 
 mkdir ca_certs crl newcerts private
 chmod 700 private
+
 touch index.txt
 echo 1000 > serial
+
+# Certificate Revoke List
+touch crlnumber
+echo 1000 > clrnumber
+
 cp $HOME/openssl.cnf $HOME/$ROOTCA_DIR

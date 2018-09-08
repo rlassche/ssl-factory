@@ -80,5 +80,7 @@ rm -f ca/server_certs/certs/${SERVER_COMMON_NAME}*
 rm -f ca/server_certs/private/${SERVER_COMMON_NAME}*
 rm -f ca/server_certs/csr/${SERVER_COMMON_NAME}*
 
+rm -f ca/server_certs/openssl.${SERVER_COMMON_NAME}.cnf
+
 echo "Removed certificates for ${SERVER_COMMON_NAME}";
 exit 0;

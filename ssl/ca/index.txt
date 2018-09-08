@@ -1,1 +1,2 @@
 V	190917203150Z		1001	unknown	/C=NL/ST=Blaak 45679/O=The OS Company/OU=Rotterdam Office/CN=srv_rotterdam01.local
+V	190917220347Z		1004	unknown	/C=NL/ST=Stationsweg 9999/O=The OS Company/OU=Rotterdam Office/CN=srv_rotterdam02.local

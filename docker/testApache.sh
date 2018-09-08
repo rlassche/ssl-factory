@@ -30,5 +30,47 @@ curl -k -I https://${SERVER_COMMON_NAME}:9443 \
 curl --cacert certs/ca.cert.pem -I https://${SERVER_COMMON_NAME}:9443 \
 	&& echo -e "OK: Test HTTPS on port 9443 and validate hostname against the certificate with CA\n";
 
-openssl s_client -connect ${SERVER_COMMON_NAME}:9443 2>&1 | openssl x509 -noout -serial
-#openssl x509 -in certs/${SERVER_COMMON_NAME}.cert.pem -text
+
+#openssl s_client -connect ${SERVER_COMMON_NAME}:9443 2>&1 | openssl x509 -noout -serial
+##openssl x509 -in certs/${SERVER_COMMON_NAME}.cert.pem -text
+
+echo -e "\nCertificate dates:\n"
+echo | openssl s_client -servername ${COMMON_SERVER_NAME} \
+	-connect ${SERVER_COMMON_NAME}:9443 2> /dev/null | \
+	openssl x509 -noout -dates
+
+echo -e "#####################################################\n";
+# checkend of certificate: 
+if openssl x509 -checkend 864000 -noout -in certs/${SERVER_COMMON_NAME}.cert.pem
+then
+  echo "Certificate is good for another 10 days!"
+else
+  echo "Certificate has expired or will do so within 10 days!"
+  echo "(or is invalid/not found)"
+fi
+echo "STOP";
+exit;
+
+echo -e "\nWho is the issuer of this certificate (CA):\n"
+echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
+			-connect ${SERVER_COMMON_NAME}:9443 2>/dev/null | \
+		openssl x509 -noout -issuer
+
+echo -e "\nWho is the owner of the certificate (ussued to, Subject: /CN):\n"
+
+echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
+	-connect ${SERVER_COMMON_NAME}:9443 2>/dev/null | \
+	openssl x509 -noout -subject
+
+
+echo -e "\n\nALL IN ONCE:\n";
+
+echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
+	-connect ${SERVER_COMMON_NAME}:9443 2>/dev/null | \
+	openssl x509 -noout -issuer -subject -dates
+
+
+echo -e "\nFinger print\n";
+echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
+	-connect ${SERVER_COMMON_NAME}:9443 2>/dev/null | \
+	openssl x509 -noout -fingerprint
