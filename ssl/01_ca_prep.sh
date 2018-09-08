@@ -43,6 +43,8 @@ else
 	mkdir -p $HOME/$ROOTCA_DIR/server_certs/csr
 	mkdir -p $HOME/$ROOTCA_DIR/server_certs/certs
 	mkdir -p $HOME/$ROOTCA_DIR/server_certs/crl
+
+	mkdir -p $HOME/$ROOTCA_DIR/email_certs
 fi
 
 mkdir -p $ROOTCA_DIR \

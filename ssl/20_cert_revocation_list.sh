@@ -24,11 +24,10 @@ then
 	exit 1
 fi
 . $HOME/ca.config
-while getopts "e:" opt; do
+while getopts "e:c:" opt; do
 	case $opt in
-	e) 
-		EMAIL_CONFIG=$OPTARG
-		;;
+	e) EMAIL_CONFIG=$OPTARG ;;
+	c) SERVER_CONFIG=$OPTARG ;;
 	\?) echo "$SCRIPTNAME ERROR: Invalid option: -$OPTARG"
 	;;
 	esac
@@ -41,7 +40,7 @@ then
 fi
 
 . ${EMAIL_CONFIG}
-echo SERVER_COMMON_NAME=srv_rotterdam01.local
+. ${SERVER_CONFIG}
 
 if [ ! -f "ca/server_certs/openssl.${SERVER_COMMON_NAME}.cnf" ]
 then
@@ -65,6 +64,7 @@ echo -e "************************\n"
 openssl ca -config server_certs/openssl.${SERVER_COMMON_NAME}.cnf \
       -gencrl -out server_certs/crl/${SERVER_COMMON_NAME}.crl.pem
 
+exit;
 # check the contents of the CRL with the crl tool.
 openssl crl -in server_certs/crl/${SERVER_COMMON_NAME}.crl.pem -noout -text
 

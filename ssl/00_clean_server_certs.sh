@@ -72,15 +72,20 @@ fi
 CERT_ID=`grep "/CN=${SERVER_COMMON_NAME}" ca/index.txt | awk '{ print $3 }'`
 rm -f ca/newcerts/${CERT_ID}.pem
 
+# Remove client email certificates
+sed -e "/CN=.*@${SERVER_COMMON_NAME}/d" ca/index.txt > /tmp/$$
+
+rm -f ca/email_certs/${SERVER_COMMON_NAME}/*
+
 # Remove server from index.txt file
-cp ca/index.txt ca/index.txt.org
-sed -e "/CN=${SERVER_COMMON_NAME}/d" ca/index.txt.org > ca/index.txt
+sed -e "/CN=${SERVER_COMMON_NAME}/d" /tmp/$$  > ca/index.txt
 
 rm -f ca/server_certs/certs/${SERVER_COMMON_NAME}*
 rm -f ca/server_certs/private/${SERVER_COMMON_NAME}*
 rm -f ca/server_certs/csr/${SERVER_COMMON_NAME}*
 
 rm -f ca/server_certs/openssl.${SERVER_COMMON_NAME}.cnf
+
 
 echo "Removed certificates for ${SERVER_COMMON_NAME}";
 exit 0;

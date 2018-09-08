@@ -328,14 +328,49 @@ Certificate is to be certified until Sep 16 11:26:37 2019 GMT (375 days)
 ```
 
 
-
-# <a name="tit_1_3"></a>Create client-email certificates
+# <a name="tit_1_4"></a>Create a revoke list
 
 # Certificate Revoke List
 
-TODO.
+Use script `20_cert_revocation_list.sh -e email_rob@srv_rotterdam01.local.config`
 
-# <a name="tit_1_4"></a>Create a revoke list
+File  `srv_rotterdam01.local.crl.pem` will be created.
+
+```
+ca
+├── ca_certs
+│   ├── ca.cert.crt
+│   └── ca.cert.pem
+├── clrnumber
+├── crl
+├── crlnumber
+├── crlnumber.old
+├── index.txt
+├── index.txt.attr
+├── index.txt.attr.old
+├── index.txt.old
+├── newcerts
+│   └── 1001.pem
+├── openssl.cnf
+├── private
+│   └── ca.key.pem
+├── serial
+├── serial.old
+└── server_certs
+    ├── certs
+    │   ├── srv_rotterdam01.local.cert.crt
+    │   └── srv_rotterdam01.local.cert.pem
+    ├── crl
+    │   └── srv_rotterdam01.local.crl.pem
+    ├── csr
+    │   └── srv_rotterdam01.local.csr.pem
+    ├── openssl.srv_rotterdam01.local.cnf
+    └── private
+        └── srv_rotterdam01.local.key.pem
+
+```
+
+# <a name="tit_1_3"></a>Create client-email certificates
 
 TODO.
 

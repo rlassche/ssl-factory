@@ -11,4 +11,9 @@
 ./04_server_key.sh -c srv_rotterdam.config
 ./05_server_sign_request.sh -c srv_rotterdam.config
 ./06_ca_signs_server_sign_request.sh -c srv_rotterdam.config
+./20_cert_revocation_list.sh -e email_rob@srv_rotterdam01.local.config \
+						 -c srv_rotterdam.config
+./21_user_key_and_csr.sh -e email_rob@srv_rotterdam01.local.config \
+						 -c srv_rotterdam.config
+exit;
 ./07_ship_certificates.sh -c srv_rotterdam.config
