@@ -77,4 +77,8 @@ echo | openssl s_client -servername ${SERVER_COMMON_NAME} \
 echo -e "\nFinger print CA\n";
 openssl x509 -in certs/ca.cert.pem -noout -fingerprint
 
-echo "Now, you can install the client certificate and ca-root certificate in the browser(s)"
+echo -e "Now, you can install the client certificate and ca-root certificate in the browser(s)\n"
+
+echo -e "Print env. \n"
+curl http://${SERVER_COMMON_NAME}:9080/cgi-bin/printenv.pl | grep SERVER_NAME
+curl https://${SERVER_COMMON_NAME}:9443/cgi-bin/printenv.pl | grep SSL_SERVER_M_SERIAL

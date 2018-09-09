@@ -21,6 +21,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 
 # Copy the certificate files to the image
 COPY certs/ /tmp
+COPY apache2/printenv* /usr/lib/cgi-bin
 
 # Update server certificate and key file in the config file 
 # and copy the cert files to the apache directory
@@ -32,9 +33,19 @@ RUN sed 's/ssl-cert-snakeoil.pem/srv_rotterdam01.local.cert.pem/' /etc/apache2/s
 	&& openssl x509 -in /tmp/ca.cert.pem -inform PEM -out /usr/local/share/ca-certificates/ca_the_company.cert.crt \
 	&& update-ca-certificates
 
-COPY fixInImage.sh /tmp
+# enable cgi-bin
+RUN	sed '/#.*Include.*serve-cgi-bin.conf/  s/#//g' /etc/apache2/sites-available/000-default.conf > /tmp/$$ \
+	&& mv /tmp/$$ /etc/apache2/sites-available/000-default.conf \
+	&& sed '/#.*Include.*serve-cgi-bin.conf/  s/#//g' /etc/apache2/sites-available/default-ssl.conf > /tmp/$$ \
+	&& mv /tmp/$$ /etc/apache2/sites-available/default-ssl.conf
+	
 
+#COPY fixInImage.sh /tmp
+
+# cgi-bin: enable alias, cgi
 RUN a2enmod ssl \
+	&& a2enmod alias \
+	&& a2enmod cgi \
 	&& a2ensite default-ssl.conf
 
 
