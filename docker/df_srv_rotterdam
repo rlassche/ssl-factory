@@ -40,6 +40,41 @@ RUN	sed '/#.*Include.*serve-cgi-bin.conf/  s/#//g' /etc/apache2/sites-available/
 	&& mv /tmp/$$ /etc/apache2/sites-available/default-ssl.conf
 	
 
+############################ markdown #######################
+ADD apache2/discount-2.2.4 /opt/discount-2.2.4
+
+# git clone https://github.com/hamano/apache-mod-markdown.git
+ADD apache2/apache-mod-markdown /opt/apache-mod-markdown
+COPY apache2/markdown.* /etc/apache2/mods-available/
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+	&& apt-get install -y --no-install-recommends \
+				build-essential libtool automake autoconf libmarkdown2-dev \
+	&& cd /opt \
+	&& echo "Installing discount" \
+	&& cd /opt/discount-2.2.4 \
+	&& ./configure.sh \
+	&& make \
+	&& make install \
+	&& echo "Installing markdown" \
+	&& cd /opt/apache-mod-markdown \
+	&& autoreconf -f -i \
+	&& ./configure --with-apxs=/usr/bin/apxs \
+	&& make \
+	&& make install \
+	&& a2enmod markdown
+
+############################ markdown #######################
+
+
+
+##### server-info ###########################################
+# Require all granted   in file 'mods-enabled/info.conf
+#############################################################
+
+##### server-status ###########################################
+# Require all granted   in file 'mods-enabled/status.conf
+#############################################################
 #COPY fixInImage.sh /tmp
 
 # cgi-bin: enable alias, cgi
