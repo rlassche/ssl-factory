@@ -82,3 +82,11 @@ echo -e "Now, you can install the client certificate and ca-root certificate in 
 echo -e "Print env. \n"
 curl http://${SERVER_COMMON_NAME}:9080/cgi-bin/printenv.pl | grep SERVER_NAME
 curl https://${SERVER_COMMON_NAME}:9443/cgi-bin/printenv.pl | grep SSL_SERVER_M_SERIAL
+
+curl https://${SERVER_COMMON_NAME}:9443/secure/index.html || \
+	echo -e "\nOK: curl failed (no client certifcate passed to server)\n"
+
+curl --cert certs/rob@srv_rotterdam01.local.cert.pem \
+	 --key  certs/rob@srv_rotterdam01.local.key.pem \
+	 https://${SERVER_COMMON_NAME}:9443/secure/index.html  && \
+	echo "OK: Pass a valid client certificate" 

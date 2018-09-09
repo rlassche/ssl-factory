@@ -40,6 +40,7 @@ RUN	sed '/#.*Include.*serve-cgi-bin.conf/  s/#//g' /etc/apache2/sites-available/
 	&& mv /tmp/$$ /etc/apache2/sites-available/default-ssl.conf
 	
 
+
 ############################ markdown #######################
 ADD apache2/discount-2.2.4 /opt/discount-2.2.4
 
@@ -75,6 +76,31 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 ##### server-status ###########################################
 # Require all granted   in file 'mods-enabled/status.conf
 #############################################################
+
+
+################### SSL Secured directory #####################
+# SSL secure directory
+# Access is allowed with a client certificate for users
+# in the 'Rotterdam Office' only.
+###############################################################
+# Insert a Directory for secure_directory
+RUN mkdir /etc/apache2/ssl.crt \
+	&& cp /tmp/ca.cert.pem /etc/apache2/ssl.crt \
+	&& sed -i  '/#SSLCACertificateFile/a SSLCACertificateFile /etc/apache2/ssl.crt/ca.cert.pem' /etc/apache2/sites-available/default-ssl.conf \
+	&& mkdir /var/www/secure_dir \
+	&& sed -i  "/DocumentRoot/a \
+Alias "/secure" "/var/www/secure_dir"\n \
+<Directory /var/www/secure_dir>\n \
+	SSLVerifyClient require\n \
+    SSLVerifyDepth  1\n \
+    SSLRequire ( %{SSL_CLIENT_S_DN_OU} in {\"Rotterdam Office\"} )\n\
+    SSLOptions +StdEnvVars\n \
+</Directory> " /etc/apache2/sites-available/default-ssl.conf
+
+COPY apache2/secure/ /var/www/secure_dir
+
+
+
 #COPY fixInImage.sh /tmp
 
 # cgi-bin: enable alias, cgi
