@@ -4,7 +4,7 @@
 # Pull base image.
 FROM ubuntu:16.04
 # Maintainer
-MAINTAINER Rob Lassche <roblassche@yahoo.com>
+MAINTAINER Rob <rob@pd1rla.com>
 
 RUN apt-get update \
 	&& apt-get -y dist-upgrade -u \
@@ -22,6 +22,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 # Copy the certificate files to the image
 COPY certs/ /tmp
 COPY apache2/printenv* /usr/lib/cgi-bin
+
 
 # Update server certificate and key file in the config file 
 # and copy the cert files to the apache directory
@@ -87,7 +88,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 RUN mkdir /etc/apache2/ssl.crt \
 	&& cp /tmp/ca.cert.pem /etc/apache2/ssl.crt \
 	&& sed -i  '/#SSLCACertificateFile/a SSLCACertificateFile /etc/apache2/ssl.crt/ca.cert.pem' /etc/apache2/sites-available/default-ssl.conf \
-	&& mkdir /var/www/secure_dir \
+	&& mkdir -p /var/www/secure_dir/cgi-bin \
 	&& sed -i  "/DocumentRoot/a \
 Alias "/secure" "/var/www/secure_dir"\n \
 <Directory /var/www/secure_dir>\n \
@@ -98,6 +99,7 @@ Alias "/secure" "/var/www/secure_dir"\n \
 </Directory> " /etc/apache2/sites-available/default-ssl.conf
 
 COPY apache2/secure/ /var/www/secure_dir
+COPY apache2/serve-cgi-bin-secure.conf /etc/apache2/conf-available
 
 
 
@@ -107,6 +109,7 @@ COPY apache2/secure/ /var/www/secure_dir
 RUN a2enmod ssl \
 	&& a2enmod alias \
 	&& a2enmod cgi \
+	&& a2enconf serve-cgi-bin-secure \
 	&& a2ensite default-ssl.conf
 
 

@@ -90,3 +90,10 @@ curl --cert certs/rob@srv_rotterdam01.local.cert.pem \
 	 --key  certs/rob@srv_rotterdam01.local.key.pem \
 	 https://${SERVER_COMMON_NAME}:9443/secure/index.html  && \
 	echo "OK: Pass a valid client certificate" 
+
+
+echo -e "Display all Env. variables, (client cert. as well)\n";
+curl --cert certs/rob@srv_rotterdam01.local.cert.pem \
+	 --key  certs/rob@srv_rotterdam01.local.key.pem \
+	 https://${SERVER_COMMON_NAME}:9443/secure/cgi-bin/printenv.pl  && \
+	echo -e "\nOK: cgi-bin in secure directory. (a valid client certificate is required)\n" 
